@@ -32,7 +32,7 @@ import axios from 'axios'
 export default {
   async asyncData({ params }) {
     const { data } = await axios.get(
-      `http://ae9d6466e0b4146b2a5a56f694fc0666-503022177.ap-southeast-1.elb.amazonaws.com:3000/blog`
+      `http://ad845c7d5902a4de1be90936f2760133-972794933.ap-southeast-1.elb.amazonaws.com:3000/blog`
     )
     return { posts: data.results }
   }

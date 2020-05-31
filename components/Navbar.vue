@@ -17,15 +17,35 @@
             >Home</nuxt-link
           >
           <nuxt-link
+            v-if="!this.$store.state.auth"
             to="/login"
             class="navbar-item is-active is-size-5 has-text-weight-semibold"
             >Login</nuxt-link
+          >
+          <a
+            v-if="this.$store.state.auth"
+            class="navbar-item is-active is-size-5 has-text-weight-semibold"
+            @click.prevent="logout"
+            >Logout</a
           >
         </div>
       </div>
     </div>
   </nav>
 </template>
+
+<script>
+const Cookie = process.client ? require('js-cookie') : undefined
+
+export default {
+  methods: {
+    logout() {
+      Cookie.remove('auth')
+      this.$store.commit('setAuth', null)
+    }
+  }
+}
+</script>
 
 <style>
 nav.navbar {
