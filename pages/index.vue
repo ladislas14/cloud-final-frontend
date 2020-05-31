@@ -2,6 +2,11 @@
   <section class="hero ">
     <div class="hero-body">
       <div class="container">
+        <div v-if="posts.length === 0" class="tile is-parent">
+          <article class="tile is-child notification ">
+            <p class="title">No post.</p>
+          </article>
+        </div>
         <div v-for="post in posts" :key="post.id">
           <section class="section">
             <div class="columns">
