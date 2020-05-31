@@ -1,42 +1,49 @@
 <template>
   <div class="container">
     <h1>Sign in to access the secret page</h1>
+    <p v-if="wrongCredentials" class="error">Wrong credentials.</p>
     <div>
-      <label for="email">
-        <input id="email" type="email" value="test" />
+      <label for="username">
+        <input id="username" v-model="username" type="text" />
       </label>
       <label for="password">
-        <input id="password" type="password" value="test" />
+        <input id="password" v-model="password" type="password" />
       </label>
       <button @click="postLogin">login</button>
-      <p>The credentials are not verified for the example purpose.</p>
     </div>
   </div>
 </template>
 
 <script>
-import axios from 'axios'
 const Cookie = process.client ? require('js-cookie') : undefined
 
 export default {
   middleware: 'notAuthenticated',
+  data() {
+    return {
+      username: null,
+      password: null,
+      wrongCredentials: false
+    }
+  },
   methods: {
     async postLogin() {
-      const token = await axios.post('http://localhost:3000/auth/login', {
-        username: 'john',
-        password: 'changeme'
+      const response = await this.$axios.post('/auth/login', {
+        username: this.username,
+        password: this.password
       })
 
-      console.log(token)
-      setTimeout(() => {
-        // we simulate the async request with timeout.
+      if (response.status === 201 && response.data.accessToken) {
         const auth = {
-          accessToken: 'someStringGotFromApiServiceWithAjax'
+          accessToken: response.data.accessToken
         }
         this.$store.commit('setAuth', auth) // mutating to store for client rendering
         Cookie.set('auth', auth) // saving token in cookie for server rendering
-        this.$router.push('/')
-      }, 1000)
+        this.$router.push('/admin')
+        this.$axios.setToken(response.data.accessToken, 'Bearer')
+      } else {
+        this.wrongCredentials = true
+      }
     }
   }
 }

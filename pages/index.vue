@@ -17,6 +17,15 @@
                   </h2>
                   <h1 class="title">{{ post.title }}</h1>
                   <p>
+                    <img
+                      :src="
+                        'https://bucket-cloud-final.s3-ap-southeast-1.amazonaws.com/' +
+                          post.photoId
+                      "
+                      :alt="post.photoId"
+                    />
+                  </p>
+                  <p>
                     {{ post.content }}
                   </p>
                 </div>
@@ -32,13 +41,9 @@
 </template>
 
 <script>
-import axios from 'axios'
-
 export default {
-  async asyncData({ params }) {
-    const { data } = await axios.get(
-      `http://ad845c7d5902a4de1be90936f2760133-972794933.ap-southeast-1.elb.amazonaws.com:3000/blog`
-    )
+  async asyncData({ $axios }) {
+    const { data } = await $axios.get(`/blog`)
     return { posts: data.results }
   }
 }

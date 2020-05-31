@@ -22,6 +22,12 @@
             class="navbar-item is-active is-size-5 has-text-weight-semibold"
             >Login</nuxt-link
           >
+          <nuxt-link
+            v-if="this.$store.state.auth"
+            to="/admin"
+            class="navbar-item is-active is-size-5 has-text-weight-semibold"
+            >Admin</nuxt-link
+          >
           <a
             v-if="this.$store.state.auth"
             class="navbar-item is-active is-size-5 has-text-weight-semibold"
@@ -42,6 +48,8 @@ export default {
     logout() {
       Cookie.remove('auth')
       this.$store.commit('setAuth', null)
+      this.$axios.setToken(false)
+      this.$router.push('/')
     }
   }
 }

@@ -1,3 +1,6 @@
+const envFile = process.env.NODE_ENV ? `.env.${process.env.NODE_ENV}` : '.env'
+require('dotenv').config({ path: envFile })
+
 export default {
   mode: 'universal',
   /*
@@ -49,7 +52,10 @@ export default {
    ** Axios module configuration
    ** See https://axios.nuxtjs.org/options
    */
-  axios: {},
+  axios: {
+    host: process.env.API_HOST,
+    port: process.env.API_PORT
+  },
   /*
    ** Build configuration
    */
@@ -63,6 +69,6 @@ export default {
     }
   },
   server: {
-    port: 8080 // par défaut: 3000
+    port: process.env.NODE_ENV === 'production' ? 80 : 8080 // par défaut: 3000
   }
 }
